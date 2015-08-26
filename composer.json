@@ -1,0 +1,14 @@
+{
+  "name": "ecodev/calendar-display",
+  "type": "typo3-cms-extension",
+  "description": "Display a calendar",
+  "homepage": "https://github.com/ecodev/calendar_display",
+  "license": ["GPL-2.0+"],
+  "keywords": [
+    "TYPO3 CMS",
+    "Calendar"
+  ],
+  "support": {
+    "issues": "https://github.com/ecodev/calendar_display/issues"
+  }
+}
