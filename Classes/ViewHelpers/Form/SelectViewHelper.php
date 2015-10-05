@@ -285,5 +285,3 @@ class Tx_CalendarDisplay_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_View
 		return $output;
 	}
 }
-
-?>

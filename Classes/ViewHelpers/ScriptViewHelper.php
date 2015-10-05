@@ -1,34 +1,24 @@
 <?php
 
-/* * *************************************************************
- *  Copyright notice
+/**
+ * This file is part of the TYPO3 CMS project.
  *
- *  (c) 2011 Fabien Udriot
- *  All rights reserved
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ * The TYPO3 project - inspiring people to share!
+ */
 
 /**
  * View helper for rendering script
  *
  * = Examples =
  */
-class Tx_CalendarDisplay_ViewHelpers_ScriptViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class Tx_CalendarDisplay_ViewHelpers_ScriptViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Inject JS file in the header code.
@@ -40,7 +30,7 @@ class Tx_CalendarDisplay_ViewHelpers_ScriptViewHelper extends Tx_Fluid_Core_View
 	 * @param bool $forceOnTop
 	 * @return string
 	 */
-	public function render($src=NULL, $cache=FALSE, $concat=FALSE, $compress=FALSE, $forceOnTop = FALSE) {
+	public function render($src = NULL, $cache = FALSE, $concat = FALSE, $compress = FALSE, $forceOnTop = FALSE) {
 
 		if ($src === NULL) {
 			$content = $this->renderChildren();
@@ -68,7 +58,7 @@ class Tx_CalendarDisplay_ViewHelpers_ScriptViewHelper extends Tx_Fluid_Core_View
 	 * @return string
 	 */
 	protected function getTag($file) {
-		$file = t3lib_div::createVersionNumberedFilename($file);
+		$file = \TYPO3\CMS\Core\Utility\GeneralUtility::createVersionNumberedFilename($file);
 		$tag = '<script src="' . htmlspecialchars($file) . '" type="text/javascript"></script>';
 		return $tag;
 	}
@@ -83,11 +73,10 @@ class Tx_CalendarDisplay_ViewHelpers_ScriptViewHelper extends Tx_Fluid_Core_View
 		if (substr($filename, 0, 4) == 'EXT:') { // extension
 			list($extKey, $local) = explode('/', substr($filename, 4), 2);
 			$filename = '';
-			if (strcmp($extKey, '') && t3lib_extMgm::isLoaded($extKey) && strcmp($local, '')) {
-				$filename = t3lib_extMgm::siteRelPath($extKey) . $local;
+			if (strcmp($extKey, '') && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded($extKey) && strcmp($local, '')) {
+				$filename = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($extKey) . $local;
 			}
 		}
 		return $filename;
 	}
 }
-?>

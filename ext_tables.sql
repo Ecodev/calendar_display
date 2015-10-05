@@ -1,7 +1,7 @@
 CREATE TABLE tx_calendardisplay_domain_model_resource (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
-	
+
 	name varchar(255) DEFAULT '' NOT NULL,
 	number int(11) DEFAULT '0' NOT NULL,
 	image text NOT NULL,
@@ -33,12 +33,12 @@ CREATE TABLE tx_calendardisplay_domain_model_resource (
 CREATE TABLE tx_calendardisplay_domain_model_event (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
-	
+
 	time_begin int(11) DEFAULT '0' NOT NULL,
 	time_end int(11) DEFAULT '0' NOT NULL,
 	note varchar(255) DEFAULT '' NOT NULL,
 	purchaser int(11) unsigned DEFAULT '0' NOT NULL,
-	booking int(11) unsigned DEFAULT '0' NOT NULL,	
+	booking int(11) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE tx_calendardisplay_domain_model_event (
 CREATE TABLE tx_calendardisplay_domain_model_booking (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
-	
+
 	event int(11) unsigned DEFAULT '0' NOT NULL,
 	resources int(11) unsigned DEFAULT '0' NOT NULL,
 	number int(11) DEFAULT '0' NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE tx_calendardisplay_booking_resource_mm (
 	sorting int(11) unsigned DEFAULT '0' NOT NULL,
 	sorting_foreign int(11) unsigned DEFAULT '0' NOT NULL,
 	number int(11) DEFAULT '0' NOT NULL,
-	
+
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign)
 );

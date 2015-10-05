@@ -1,38 +1,22 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 Fabien Udriot <fabien.udriot@ecodev.ch>, Ecodev
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
 
+/**
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
 /**
  * Controller for the Event object
- *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-
- class Tx_CalendarDisplay_Controller_EventController extends Tx_Extbase_MVC_Controller_ActionController {
+class Tx_CalendarDisplay_Controller_EventController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
 	/**
 	 * eventRepository
@@ -68,10 +52,10 @@
 	 * @return void
 	 */
 	protected function initializeAction() {
-		$this->eventRepository = t3lib_div::makeInstance('Tx_CalendarDisplay_Domain_Repository_EventRepository');
-		$this->resourceRepository = t3lib_div::makeInstance('Tx_CalendarDisplay_Domain_Repository_ResourceRepository');
-		$this->resourceCategoryRepository = t3lib_div::makeInstance('Tx_CalendarDisplay_Domain_Repository_ResourceCategoryRepository');
-		$this->feUserRepository = t3lib_div::makeInstance('Tx_CalendarDisplay_Domain_Repository_FeUserRepository');
+		$this->eventRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_CalendarDisplay_Domain_Repository_EventRepository');
+		$this->resourceRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_CalendarDisplay_Domain_Repository_ResourceRepository');
+		$this->resourceCategoryRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_CalendarDisplay_Domain_Repository_ResourceCategoryRepository');
+		$this->feUserRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_CalendarDisplay_Domain_Repository_FeUserRepository');
 	}
 
 	/**
@@ -80,7 +64,7 @@
 	 * @return string The rendered list view
 	 */
 	public function calendarAction() {
-		$this->view->assign('events',  $this->eventRepository->findAll());
+		$this->view->assign('events', $this->eventRepository->findAll());
 		$this->view->assign('currentUser', $this->feUserRepository->findByUid(intval($GLOBALS['TSFE']->fe_user->user['uid'])));
 	}
 
@@ -102,9 +86,9 @@
 
 		/* @var $uri Tx_Extbase_MVC_Web_Routing_UriBuilder */
 		$uri = $this->uriBuilder
-				->setUseCacheHash(FALSE)
-				->setArguments($arguments)
-				->buildFrontendUri();
+			->setUseCacheHash(FALSE)
+			->setArguments($arguments)
+			->buildFrontendUri();
 
 		$message = Tx_Extbase_Utility_Localization::translate($messageType, 'CalendarDisplay') . ' ';
 		$message .= '<a href="' . $uri . '" class="tx-calendardisplay-list-wrapper-edit" id="tx-calendardisplay-edit-event' . $event->getUid() . '">';
@@ -121,15 +105,15 @@
 	public function listAction() {
 		$events = $this->eventRepository->findAllByTimeEnd(strtotime('today'));
 
-		if(count($events) < 1){
+		if (count($events) < 1) {
 			$settings = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-			if(empty($settings['persistence']['storagePid'])){
+			if (empty($settings['persistence']['storagePid'])) {
 				$this->flashMessageContainer->add('No storagePid configured!');
 			}
 		}
 
 		$this->view->assign('events', $events);
-		$this->view->assign('categories' , $this->resourceCategoryRepository->findAll());
+		$this->view->assign('categories', $this->resourceCategoryRepository->findAll());
 		$this->view->assign('currentUser', $this->feUserRepository->findByUid(intval($GLOBALS['TSFE']->fe_user->user['uid'])));
 	}
 
@@ -146,7 +130,7 @@
 		$this->view->assign('availableResources', array());
 		$this->view->assign('message', Tx_Extbase_Utility_Localization::translate('set_date', 'CalendarDisplay'));
 		$this->view->assign('messageType', 'information');
-		$this->view->assign('categories' , $this->resourceCategoryRepository->findAll());
+		$this->view->assign('categories', $this->resourceCategoryRepository->findAll());
 		$this->view->assign('refererAction', $refererAction);
 		$this->flashMessageContainer->flush();
 	}
@@ -159,12 +143,12 @@
 	 * @return void
 	 */
 	public function createAction(Tx_CalendarDisplay_Domain_Model_Event $event) {
-			// get current login user if it have right then add the new event
+		// get current login user if it have right then add the new event
 		$currentUser = $this->feUserRepository->findByUid(intval($GLOBALS['TSFE']->fe_user->user['uid']));
 		if ($currentUser) {
-			$bookings = t3lib_div::_POST('booking');
+			$bookings = \TYPO3\CMS\Core\Utility\GeneralUtility::_POST('booking');
 			$bookingAttached = new Tx_Extbase_Persistence_ObjectStorage();
-			foreach ($bookings as $key=>$value) {
+			foreach ($bookings as $key => $value) {
 				if ($value) {
 					$resouce = $this->resourceRepository->findByUid($key);
 					if ($resouce) {
@@ -204,7 +188,7 @@
 		$this->view->assign('event', $event);
 		$events = $this->eventRepository->findAllByTimeRange($event->getTimeBegin(), $event->getTimeEnd());
 		$this->view->assign('availableResources', $this->resourceRepository->findAvailable($events));
-		$this->view->assign('categories' , $this->resourceCategoryRepository->findAll());
+		$this->view->assign('categories', $this->resourceCategoryRepository->findAll());
 		$this->view->assign('refererAction', $refererAction);
 		$this->flashMessageContainer->flush();
 	}
@@ -218,13 +202,13 @@
 	 * @return void
 	 */
 	public function updateAction(Tx_CalendarDisplay_Domain_Model_Event $event) {
-			// get current login user if it have right then add the new event
+		// get current login user if it have right then add the new event
 		$currentUser = $this->feUserRepository->findByUid(intval($GLOBALS['TSFE']->fe_user->user['uid']));
 		$getPurchaserId = $event->getPurchaser() ? $event->getPurchaser()->getUid() : NULL;
 		if ($currentUser->getUid() == $getPurchaserId || $currentUser->getTxCalendardisplayAdmin() == 1) {
-			$bookings = t3lib_div::_POST('booking');
+			$bookings = \TYPO3\CMS\Core\Utility\GeneralUtility::_POST('booking');
 			$bookingAttached = new Tx_Extbase_Persistence_ObjectStorage();
-			foreach ($bookings as $key=>$value) {
+			foreach ($bookings as $key => $value) {
 				if ($value) {
 					$resouce = $this->resourceRepository->findByUid($key);
 					if ($resouce) {
@@ -267,7 +251,7 @@
 		$this->redirect('list');
 	}
 
- 	/**
+	/**
 	 * Filter the event list which follows by parameter category, keyword, and timeBegin
 	 *
 	 * @param integer $category the Category to be filter
@@ -280,7 +264,7 @@
 		$this->view->assign('currentUser', $this->feUserRepository->findByUid(intval($GLOBALS['TSFE']->fe_user->user['uid'])));
 	}
 
- 	/**
+	/**
 	 * Filter available item by some parameters category and keyword
 	 *
 	 * @param Tx_CalendarDisplay_Domain_Model_Event $event the Event to display
@@ -296,12 +280,10 @@
 		if ($dateBegin <= $dateEnd) {
 			$events = $this->eventRepository->findAllByTimeRange($dateBegin, $dateEnd);
 			$this->view->assign('availableResources', $this->resourceRepository->findAvailable($events, $category, $keyword));
-		}
-		else {
+		} else {
 			$this->view->assign('message', Tx_Extbase_Utility_Localization::translate('date_error', 'CalendarDisplay'));
 			$this->view->assign('messageType', 'error');
 			$this->view->assign('availableResources', array());
 		}
 	}
 }
-?>

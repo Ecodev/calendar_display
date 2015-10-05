@@ -44,12 +44,12 @@ class Tx_CalendarDisplay_ViewHelpers_Widget_Controller_PaginateController extend
 	 * @var integer
 	 */
 	protected $numberOfPages = 1;
-	
+
 	/**
 	 * @var integer
 	 */
 	protected $numberOfRecords = 1;
-	
+
 	/**
 	 * @var integer
 	 */
@@ -60,7 +60,7 @@ class Tx_CalendarDisplay_ViewHelpers_Widget_Controller_PaginateController extend
 	 */
 	public function initializeAction() {
 		$this->objects = $this->widgetConfiguration['objects'];
-		$this->configuration = t3lib_div::array_merge_recursive_overrule($this->configuration, $this->widgetConfiguration['configuration'], TRUE);
+		$this->configuration = \TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($this->configuration, $this->widgetConfiguration['configuration'], TRUE);
 		$this->numberOfRecords = count($this->objects);
 	}
 

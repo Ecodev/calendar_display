@@ -1,39 +1,24 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 Fabien Udriot <fabien.udriot@ecodev.ch>, Ecodev
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
 
+/**
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
 /**
  * Repository for Tx_CalendarDisplay_Domain_Model_Event
- *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
+class Tx_CalendarDisplay_Domain_Repository_EventRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 
- class Tx_CalendarDisplay_Domain_Repository_EventRepository extends Tx_Extbase_Persistence_Repository {
- 	/**
+	/**
 	 * Gets events following by $category and $keyword
 	 *
 	 * @param integer $category Category
@@ -57,7 +42,7 @@
 
 		if ($timeBegin) {
 
-			$constraintTime = $query->greaterThanOrEqual('time_begin',  strtotime($timeBegin));
+			$constraintTime = $query->greaterThanOrEqual('time_begin', strtotime($timeBegin));
 			if ($constraint) {
 				$constraint = $query->logicalAnd($constraint, $constraintTime);
 			} else {
@@ -76,7 +61,7 @@
 	 * @param integer $timeBegin Unix timestamp
 	 * @return array of Tx_CalendarDisplay_Domain_Model_Event
 	 */
- 	public function findAllByTimeBegin($timeBegin) {
+	public function findAllByTimeBegin($timeBegin) {
 		$query = $this->createQuery();
 		$constraint = $query->greaterThanOrEqual('time_begin', $timeBegin);
 
@@ -85,32 +70,32 @@
 			->execute();
 	}
 
- 	/**
+	/**
 	 * Gets all events which has start from the $timeEnd
 	 *
 	 * @param integer $timeEnd Unix timestamp
 	 * @return array of Tx_CalendarDisplay_Domain_Model_Event
 	 */
- 	public function findAllByTimeEnd($timeEnd) {
+	public function findAllByTimeEnd($timeEnd) {
 		$query = $this->createQuery();
 		$constraint = $query->greaterThanOrEqual('time_end', $timeEnd);
 
 		return $query->matching($constraint)
-					->setOrderings(array('time_begin' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING))
-					->execute();
+			->setOrderings(array('time_begin' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING))
+			->execute();
 	}
 
- 	/**
+	/**
 	 * Gets all events which as start from the $timeEnd
 	 *
 	 * @param integer $timeBegin Unix timestamp
 	 * @param integer $timeEnd Unix timestamp
 	 * @return array of Tx_CalendarDisplay_Domain_Model_Event
 	 */
- 	public function findAllByTimeRange($timeBegin, $timeEnd) {
+	public function findAllByTimeRange($timeBegin, $timeEnd) {
 
 		$query = $this->createQuery();
-		
+
 		// there are 4 cases
 		$_constraints[] = $query->logicalAnd(
 			$query->greaterThanOrEqual('time_begin', $timeBegin),
@@ -121,12 +106,12 @@
 			$query->greaterThanOrEqual('time_begin', $timeBegin),
 			$query->lessThanOrEqual('time_begin', $timeEnd)
 		);
-		
+
 		$_constraints[] = $query->logicalAnd(
 			$query->greaterThanOrEqual('time_end', $timeBegin),
 			$query->lessThanOrEqual('time_end', $timeEnd)
 		);
-		
+
 		$_constraints[] = $query->logicalAnd(
 			$query->lessThanOrEqual('time_begin', $timeBegin),
 			$query->greaterThanOrEqual('time_end', $timeEnd)
@@ -135,10 +120,9 @@
 		$constraints = $query->logicalOr($_constraints);
 
 		$result = $query->matching($constraints)
-						->setOrderings(array('time_begin' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING))
-						->execute();
-		
+			->setOrderings(array('time_begin' => Tx_Extbase_Persistence_QueryInterface::ORDER_ASCENDING))
+			->execute();
+
 		return $result;
 	}
 }
-?>
